@@ -74,10 +74,7 @@ int Board::getSize() const
     return size;
 }
 
-/*
+std::vector<Space *> Board::getMoves(Player* player)
+{
 
- Space* space = board[row][col];         // Get the space object from the current index
-
-
-
- * */
+}

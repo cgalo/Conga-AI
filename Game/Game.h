@@ -10,16 +10,15 @@
 #include "../Board/Board.h"
 class Game {
 private:
-    enum PlayerOptions{ white, black};
+    enum PlayerOptions{ white, black };
     Board* masterBoard;                 // Master board for this game
     Player* p1;                         // Player 1 -> White
-    Player*p2;                          // Player 2 -> Black
-
+    Player* p2;                         // Player 2 -> Black
 
 public:
-    Game();
-    ~Game();
-    void start();
+    Game();                             // Constructor
+    ~Game();                            // Destructor for garbage collecion
+    void start();                       // Main method that will run the game until it's done
 };
 
 
