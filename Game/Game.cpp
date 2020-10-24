@@ -6,12 +6,11 @@
 
 Game::Game()
 {
-    p1 = new Player(white);                     // Create the player 1
-    p2 = new Player(black);                     // Create the player 2
-    masterBoard = new Board();                  // Build the board for this game with all values to 0
-    masterBoard->setMove(0, 0, 10, white);      // Set the player 1 in the 0,0 index with 10 stones
-    masterBoard->setMove(3, 3, 10, black);      // Set player 2 in the end-right most index of the board with 10 stones
-
+    masterBoard = new Board();                              // Build the board for this game with all values to 0
+    masterBoard->setMove(0, 0, 10, white);                  // Set the player 1 in the 0,0 index with 10 stones
+    masterBoard->setMove(3, 3, 10, black);                  // Set player 2 in the end-right most index of the board with 10 stones
+    p1 = new Player(white, masterBoard->getValue(0, 0));    // Create the player 1 with the Space (0,0) for the list of spaces it holds
+    p2 = new Player(black, masterBoard->getValue(3, 3));    // Create the player 2 with the Space (3,3) for the list of spaces it holds
 }
 
 Game::~Game()
@@ -27,5 +26,5 @@ Game::~Game()
 
 void Game::start()
 {
-    masterBoard->printBoard();
+     masterBoard->printBoard();
 }
