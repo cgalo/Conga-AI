@@ -74,7 +74,7 @@ int Board::getSize() const
     return size;
 }
 
-std::vector<Space *> Board::getMoves(Player* player)
+std::vector<std::vector<Space *>> Board::getMoves(Player *player)
 {
-
+    
 }
