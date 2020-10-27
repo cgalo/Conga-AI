@@ -365,6 +365,26 @@ std::vector<Space *> Board::getSpaces(int player)
                 continue;                                   // We move to the next element
         }
     }
-
     return spaces;                                          // Return the list of spaces hold by the player
+}
+
+Board * Board::getDeepCopy()
+{
+    /**
+     * Method creates a new 2D matrix of Spaces and iterates through the board and copies every space in each index
+     * @return Pointer to the deep copy of the board
+     * */
+
+    Board* copyBoard = new Board();                         // Create a new board
+    for (int row = 0; row < getSize(); row++)               // Iterate through every column
+    {
+        for (int col = 0; col < getSize(); col++)           // Iterate through every column
+        {
+            Space* origSpace = getValue(row, col);         // Get the space for the index we are in that we want to copy
+            Space* copySpace = copyBoard->getValue(row, col);   // Get the space that we want to copy the values to
+            copySpace->setValue(origSpace->getValue());     // Copy the value for the space
+            copySpace->setPlayer(origSpace->getPlayer());   // Copy the player
+        }
+    }
+    return copyBoard;                                       // Returned the copied board
 }
