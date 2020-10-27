@@ -27,7 +27,7 @@ public:
     Board();                                                // Constructor
     ~Board();                                               // Destructor
 
-    bool setMove(int row, int col, int val, int player);    // Set the new value in the space
+    void setMove(std::vector<Space*> move, int player);     // Given a list of spaces we move the values in the board for the player
     Space* getValue(int row, int col);                      // Get the element in the given position of the board
     void printBoard();                                      // Print the current state of the board
     int getSize() const;                                    // Getter for the size of the board
