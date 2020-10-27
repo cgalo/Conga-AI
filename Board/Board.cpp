@@ -26,6 +26,7 @@ void Board::setMove(std::vector<Space *> move, int player)
      * A move has at least 2 space objects, the 1st is the original space and the following are the destinations
      *
      * @param list of spaces, that include the original space, and the ones we want to move the rocks to
+     * @param the player making the move
      * */
 
     Space* originalSpace = move[0];             // We save the original space that we initiate the move
