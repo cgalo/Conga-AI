@@ -8,8 +8,8 @@
 #define CONGA_AI_BOARD_H
 
 // Colors are used to differentiate if the space is owned by P1 or P2
-#define Color1 "[37m"                                    // Color for the P1 spaces
-#define Color2 "[35m"                                    // Color for the P2 spaces
+#define Color1 "[37m"                                      // Color for the P1 spaces
+#define Color2 "[35m"                                      // Color for the P2 spaces
 
 #include <iostream>                                         // For output
 #include <vector>                                           // To return list of possible moves for a player
