@@ -31,7 +31,7 @@ public:
     Space* getValue(int row, int col);                      // Get the element in the given position of the board
     void printBoard();                                      // Print the current state of the board
     int getSize() const;                                    // Getter for the size of the board
-    std::vector<std::vector<Space*>> getMoves(Player* player);  // List of lists of valid moves for the given player
+    std::vector<std::vector<Space*>> getMoves(int player);  // List of lists of valid moves for the given player
 };
 
 

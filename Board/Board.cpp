@@ -84,19 +84,17 @@ bool Board::isValidLocation(int row, int column) const
     return isValid;                                     // Return isValid
 }
 
-std::vector<std::vector<Space *>> Board::getMoves(Player *player)
+std::vector<std::vector<Space *>> Board::getMoves(int player)
 {
-    std::vector<std::vector<Space*>> paths;                 // Create list of lists of spaces, this is every possible path the player can do as a move
-    std::vector<Space*> currSpaces = player->getSpaces();   // We get the current spaces that the player holds
-    const int totSpaces = currSpaces.size();                // Save the size of currSpaces of this player
-    const int playerVal = player->getValue();               // Save the value of the current player as playerVal
+    std::vector <Space*> spaces = getSpaces(player);        // Get the spaces that the player currently holds in the board
+    std::vector <std::vector<Space*>> paths;                // Create list of lists of spaces, this is every possible path the player can do as a move
+    const int playerVal = player;                           // Save the value of the current player as playerVal
 
     // Now we loop through all the current spaces the player is in, we are going to see if there is a possible path per each space
-    for (int i = 0; i < totSpaces; i++)                     // Initiate loop through every space in the list
+    for (auto space: spaces)                                // Iterate through each space in the list of spaces
     {
         int tempRow, tempCol;                               // This will be updated as needed depending on what path we are testing
         // Now we check if there is an open space by checking is there is an open space either left, right, up or down of the current space
-        Space* space = currSpaces[i];                       // Get the current element of the list and save it as space
         const int row = space->getRow(), col = space->getColumn();// Get the row and column locations of the current space
 
         // First we check if the space above is a possible path -> row -1, col remains the same
