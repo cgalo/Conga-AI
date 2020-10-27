@@ -40,6 +40,7 @@ void Board::printBoard()
 {
     /**
      * Method prints the current state of the board
+     * Prints Color1 color for the white/player1 spaces and Color2 color for the black/player2
      */
 
     for (int row = 0; row < getSize(); row++)       // Iterate through the every row
@@ -86,6 +87,19 @@ bool Board::isValidLocation(int row, int column) const
 
 std::vector<std::vector<Space *>> Board::getMoves(int player)
 {
+    /**
+     * Method gets all the possible moves available for the player in the current state of the board.
+     * First we get the spaces the player holds by calling the getSpaces method and getting the list of Spaces they hold.
+     * Then we iterate through each of those spaces and cheeck every possible move that can be done with that piece.
+     * For every space there is a potential of 8 moves that we check for.
+     * These include horizontal, vertical & diagonal paths.
+     * These paths can be checking, for every space: up, down, left, right, up-right, up-left, down-right, & down-left
+     * Every path should be at least of 2 spaces, the current space the player holds and the next space then can move.
+     *
+     * @param Player we want to get the moves for
+     * @return list of list of Spaces, this is a list of legal moves the player can do with his current spaces
+     * */
+
     std::vector <Space*> spaces = getSpaces(player);        // Get the spaces that the player currently holds in the board
     std::vector <std::vector<Space*>> paths;                // Create list of lists of spaces, this is every possible path the player can do as a move
     const int playerVal = player;                           // Save the value of the current player as playerVal
