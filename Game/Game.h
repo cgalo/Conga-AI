@@ -9,7 +9,7 @@
 #include "../Board/Board.h"
 class Game {
 private:
-    enum PlayerOptions { white, black };// White for p1 and black for p2
+    enum Players { white, black };      // White for p1 and black for p2
     Board* masterBoard;                 // Master board for this game
 
 public:

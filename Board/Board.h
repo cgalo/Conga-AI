@@ -8,8 +8,8 @@
 #define CONGA_AI_BOARD_H
 
 // Colors are used to differentiate if the space is owned by P1 or P2
-#define Color1 "[37m"                                    // Color for the P1 spaces
-#define Color2 "[35m"                                    // Color for the P2 spaces
+#define Color1 "[37m"                                      // Color for the P1 spaces
+#define Color2 "[35m"                                      // Color for the P2 spaces
 
 #include <iostream>                                         // For output
 #include <vector>                                           // To return list of possible moves for a player
@@ -27,7 +27,7 @@ public:
     Board();                                                // Constructor
     ~Board();                                               // Destructor
 
-    bool setMove(int row, int col, int val, int player);    // Set the new value in the space
+    void setMove(std::vector<Space*> move, int player);     // Given a list of spaces we move the values in the board for the player
     Space* getValue(int row, int col);                      // Get the element in the given position of the board
     void printBoard();                                      // Print the current state of the board
     int getSize() const;                                    // Getter for the size of the board

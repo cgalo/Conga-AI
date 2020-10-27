@@ -3,4 +3,4 @@ project(Conga_AI)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(Conga_AI main.cpp Game/Game.cpp Game/Game.h Space/Space.cpp Space/Space.h Player/Player.cpp Player/Player.h Board/Board.cpp Board/Board.h)
+add_executable(Conga_AI main.cpp Game/Game.cpp Game/Game.h Space/Space.cpp Space/Space.h Board/Board.cpp Board/Board.h)
