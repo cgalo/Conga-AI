@@ -6,14 +6,11 @@
 #define CONGA_AI_GAME_H
 
 
-#include "../Player/Player.h"
 #include "../Board/Board.h"
 class Game {
 private:
-    enum PlayerOptions{ white, black };
+    enum PlayerOptions { white, black };// White for p1 and black for p2
     Board* masterBoard;                 // Master board for this game
-    Player* p1;                         // Player 1 -> White
-    Player* p2;                         // Player 2 -> Black
 
 public:
     Game();                             // Constructor
