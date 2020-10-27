@@ -14,13 +14,14 @@
 #include <iostream>                                         // For output
 #include <vector>                                           // To return list of possible moves for a player
 
-#include "../Player/Player.h"                               // Player and Space classes
+
 #include "../Space/Space.h"                                 // Space class to create a 2D matrix of them as a board
 class Board {
 private:
     const int size = 4;                                     // Size of the matrix/board is a 4x4
     Space*** board;                                         // 2D matrix of Space pointers
     bool isValidLocation(int row, int column) const;        // Check if the given indexes are inside the board
+    std::vector <Space*> getSpaces(int player);             // Get a list of spaces that the player holds
 
 public:
     Board();                                                // Constructor

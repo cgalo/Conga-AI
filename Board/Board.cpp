@@ -274,3 +274,28 @@ std::vector<std::vector<Space *>> Board::getMoves(Player *player)
     // We get here after reviewing all the spaces and their potential paths
     return paths;                                           // We return the paths
 }
+
+std::vector<Space *> Board::getSpaces(int player)
+{
+    /**
+     * Method iterates through the 2D matrix of Spaces to get all the Spaces hold by the player requested
+     * Each player holds a minimum of one space at any time of the game
+     * @param the enum player value that we want to get the spaces they hold
+     * @return List of spaces that the player holds
+     * */
+
+    std::vector <Space*> spaces;                            // Create the list that will hold and return the spaces of the player
+    for (int row = 0; row < getSize(); row++)               // Iterate by every row
+    {
+        for (int col = 0; col < getSize(); col++)           // Iterate through every column
+        {
+            Space* space = getValue(row, col);              // Get the space for the current row/col
+            if (space->getPlayer() == player)               // If the current space is owned by the player
+                spaces.push_back(space);                    // Then we add the space in the list
+            else                                            // Else it's not owned by the player
+                continue;                                   // We move to the next element
+        }
+    }
+
+    return spaces;                                          // Return the list of spaces hold by the player
+}
