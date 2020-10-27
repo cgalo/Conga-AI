@@ -31,5 +31,54 @@ Game::~Game()
 
 void Game::start()
 {
-     masterBoard->printBoard();
+    /**
+     * This method handles the turn by turn of the game, as well as who is the winner
+     * */
+     int currPlayer = white;                            // We set the white player as the initial player
+     std::vector<std::vector<Space*>> currMoves;        // Vector will hold the moves of a player
+     currMoves = masterBoard->getMoves(currPlayer);     // Get the moves for the current player
+     int totPlays = 0, AIMoves = 0;                     // Keep track of total moves done and the moves of the AI
+     while (!currMoves.empty())                         // While the current player has moves
+     {
+         totPlays++;
+         std::cout << "\n\tPlay #: " << totPlays << "\n\n";
+         masterBoard->printBoard();                     // Print the board
+         std::vector <Space*> move;                     // This will be used to hold the final moved selected for the current player
+
+         if (currPlayer == white)                       // If it's the AI/white/player1 turn's
+         {
+             AIMoves++;                                 // Update the total moves of the AI
+
+         }
+         else                                           // Else it's the black player's turn
+         {
+             // We'll pick a random available move for the player
+             int moveIndex = getRandNum(currMoves.size());  // Get a random number to pick a move from the move list
+             move = currMoves[moveIndex];               // Save a random move
+         }
+         masterBoard->setMove(move, currPlayer);        // Make the move in the board for the current player
+
+         // Now we swap players and get the moves for them
+         currPlayer = (currPlayer == white) ? black : white;    // If the player is white then change to black, else vice versa
+         currMoves = masterBoard->getMoves(currPlayer); // Get the moves for the new current player
+     }
+
+     std::cout << "Congratulations player ";
+     // Check who is the winner/looser
+     if (currPlayer == white)                           // This means that white ran out of possible moves
+        std::cout << "black!" << std::endl;
+     else                                               // Else the black ran out of possible moves
+         std::cout << "white!" << std::endl;
+}
+
+int Game::getRandNum(int max)
+{
+    /**
+     * This method generates a random number between 0 and the max number: 0 <= randNUm <= max
+     *
+     * @param The int max value of the range to generate a random value
+     * @return a random number between 0 and the max value
+     * */
+
+
 }
