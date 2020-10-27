@@ -252,7 +252,7 @@ std::vector<std::vector<Space *>> Board::getMoves(int player)
         tempRow = row + 1, tempCol = col - 1;
         Space* downLeftSp = getValue(tempRow, tempCol);         // Get the down-left space
         if (isValidLocation(tempRow, tempCol) &&                // If the indexes are within the board
-           (downLeftSp->getValue() == 0 && downLeftSp->getPlayer() == playerVal))   // If the space is open or is owned by the player
+           (downLeftSp->getValue() == 0 || downLeftSp->getPlayer() == playerVal))   // If the space is open or is owned by the player
         {
             std::vector<Space*> downLeftPath;                   // We create a new list for this new path]
             tempRow = row, tempCol = col;                       // Reset el row y el column
