@@ -40,6 +40,7 @@ void Board::printBoard()
 {
     /**
      * Method prints the current state of the board
+     * Prints Color1 color for the white/player1 spaces and Color2 color for the black/player2
      */
 
     for (int row = 0; row < getSize(); row++)       // Iterate through the every row
@@ -84,19 +85,30 @@ bool Board::isValidLocation(int row, int column) const
     return isValid;                                     // Return isValid
 }
 
-std::vector<std::vector<Space *>> Board::getMoves(Player *player)
+std::vector<std::vector<Space *>> Board::getMoves(int player)
 {
-    std::vector<std::vector<Space*>> paths;                 // Create list of lists of spaces, this is every possible path the player can do as a move
-    std::vector<Space*> currSpaces = player->getSpaces();   // We get the current spaces that the player holds
-    const int totSpaces = currSpaces.size();                // Save the size of currSpaces of this player
-    const int playerVal = player->getValue();               // Save the value of the current player as playerVal
+    /**
+     * Method gets all the possible moves available for the player in the current state of the board.
+     * First we get the spaces the player holds by calling the getSpaces method and getting the list of Spaces they hold.
+     * Then we iterate through each of those spaces and cheeck every possible move that can be done with that piece.
+     * For every space there is a potential of 8 moves that we check for.
+     * These include horizontal, vertical & diagonal paths.
+     * These paths can be checking, for every space: up, down, left, right, up-right, up-left, down-right, & down-left
+     * Every path should be at least of 2 spaces, the current space the player holds and the next space then can move.
+     *
+     * @param Player we want to get the moves for
+     * @return list of list of Spaces, this is a list of legal moves the player can do with his current spaces
+     * */
+
+    std::vector <Space*> spaces = getSpaces(player);        // Get the spaces that the player currently holds in the board
+    std::vector <std::vector<Space*>> paths;                // Create list of lists of spaces, this is every possible path the player can do as a move
+    const int playerVal = player;                           // Save the value of the current player as playerVal
 
     // Now we loop through all the current spaces the player is in, we are going to see if there is a possible path per each space
-    for (int i = 0; i < totSpaces; i++)                     // Initiate loop through every space in the list
+    for (auto space: spaces)                                // Iterate through each space in the list of spaces
     {
         int tempRow, tempCol;                               // This will be updated as needed depending on what path we are testing
         // Now we check if there is an open space by checking is there is an open space either left, right, up or down of the current space
-        Space* space = currSpaces[i];                       // Get the current element of the list and save it as space
         const int row = space->getRow(), col = space->getColumn();// Get the row and column locations of the current space
 
         // First we check if the space above is a possible path -> row -1, col remains the same
@@ -254,7 +266,7 @@ std::vector<std::vector<Space *>> Board::getMoves(Player *player)
         tempRow = row + 1, tempCol = col - 1;
         Space* downLeftSp = getValue(tempRow, tempCol);         // Get the down-left space
         if (isValidLocation(tempRow, tempCol) &&                // If the indexes are within the board
-           (downLeftSp->getValue() == 0 && downLeftSp->getPlayer() == playerVal))   // If the space is open or is owned by the player
+           (downLeftSp->getValue() == 0 || downLeftSp->getPlayer() == playerVal))   // If the space is open or is owned by the player
         {
             std::vector<Space*> downLeftPath;                   // We create a new list for this new path]
             tempRow = row, tempCol = col;                       // Reset el row y el column
@@ -273,4 +285,29 @@ std::vector<std::vector<Space *>> Board::getMoves(Player *player)
     }
     // We get here after reviewing all the spaces and their potential paths
     return paths;                                           // We return the paths
+}
+
+std::vector<Space *> Board::getSpaces(int player)
+{
+    /**
+     * Method iterates through the 2D matrix of Spaces to get all the Spaces hold by the player requested
+     * Each player holds a minimum of one space at any time of the game
+     * @param the enum player value that we want to get the spaces they hold
+     * @return List of spaces that the player holds
+     * */
+
+    std::vector <Space*> spaces;                            // Create the list that will hold and return the spaces of the player
+    for (int row = 0; row < getSize(); row++)               // Iterate by every row
+    {
+        for (int col = 0; col < getSize(); col++)           // Iterate through every column
+        {
+            Space* space = getValue(row, col);              // Get the space for the current row/col
+            if (space->getPlayer() == player)               // If the current space is owned by the player
+                spaces.push_back(space);                    // Then we add the space in the list
+            else                                            // Else it's not owned by the player
+                continue;                                   // We move to the next element
+        }
+    }
+
+    return spaces;                                          // Return the list of spaces hold by the player
 }
