@@ -14,7 +14,7 @@ private:
     int column;                             // Column location in the matrix graph
 
 public:
-    Space(int row, int col, int player=-1, int val=0);   // Constructor, value is set to 0 if non is given
+    Space(int row, int col, int val=0, int player=-1);   // Constructor, value is set to 0 if non is given
 
     // Getters and setters
     int getValue() const;

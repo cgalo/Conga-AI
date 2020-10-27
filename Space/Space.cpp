@@ -4,7 +4,7 @@
 
 #include "Space.h"
 
-Space::Space(int row, int col, int player, int val)
+Space::Space(int row, int col, int val, int player)
 {
     this->value = val;
     this->row = row;
