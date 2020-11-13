@@ -5,9 +5,10 @@
 #ifndef CONGA_AI_GAME_H
 #define CONGA_AI_GAME_H
 
-#include <random>                       // To assist in getting a
+#include <random>                       // To assist in selecting a random move
 
-#include "../Board/Board.h"
+#include "../Board/Board.h"             // Import the Board class
+
 class Game {
 private:
     enum Players { white, black };      // White for p1 and black for p2
@@ -19,6 +20,5 @@ public:
     ~Game();                            // Destructor for garbage collecion
     void start();                       // Main method that will run the game until it's done
 };
-
 
 #endif //CONGA_AI_GAME_H

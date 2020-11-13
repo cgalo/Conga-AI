@@ -17,7 +17,6 @@ Game::Game()
     Space* p2Space = masterBoard->getValue(3, 3);           // Get the right-end most corner for p2/black
     p2Space->setPlayer(black);                              // Set the black player as owner of this space
     p2Space->setValue(initVal);                             // Set the initial rocks for the player
-
 }
 
 Game::~Game()
@@ -48,7 +47,7 @@ void Game::start()
          if (currPlayer == white)                       // If it's the AI/white/player1 turn's
          {
              AIMoves++;                                 // Update the total moves of the AI
-
+             move = currMoves[getRandNum(currMoves.size())];
          }
          else                                           // Else it's the black player's turn
          {
@@ -57,7 +56,7 @@ void Game::start()
              move = currMoves[moveIndex];               // Save a random move
          }
          masterBoard->setMove(move, currPlayer);        // Make the move in the board for the current player
-
+         currMoves.clear();                             // Clear the available moves to make space for the next player
          // Now we swap players and get the moves for them
          currPlayer = (currPlayer == white) ? black : white;    // If the player is white then change to black, else vice versa
          currMoves = masterBoard->getMoves(currPlayer); // Get the moves for the new current player
@@ -75,10 +74,15 @@ int Game::getRandNum(int max)
 {
     /**
      * This method generates a random number between 0 and the max number: 0 <= randNUm <= max
+     * For random we are not using srand and rand(), here is more information why we implemented something different:
+     *  - https://channel9.msdn.com/Events/GoingNative/2013/rand-Considered-Harmful
      *
      * @param The int max value of the range to generate a random value
-     * @return a random number between 0 and the max value
+     * @return a random number between 0 and the max value - 1
      * */
 
-
+    std::default_random_engine generator;                               // To assist in generating a random number
+    std::uniform_int_distribution<int> distribution(0,max - 1);     // Range to pick a random number
+    int randomNum = distribution(generator);                        // Generate # between 0 and max - 1
+    return randomNum;
 }
