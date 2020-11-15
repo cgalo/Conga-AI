@@ -10,13 +10,16 @@
 
 class AI_Agent {
 private:
-    int maxP, minP;                                     // Who is the player we are maximizing and minimizing
+    int maxP, minP, maxDepth;                           // Who is the player we are maximizing and minimizing
 
     // Methods
-    int MiniMax(Board* board, int depth, bool isMax);   // Recurse to return the best value/option for the given board
+    int MiniMax(Board* board, int maxDepth, int depth, bool isMax, int alpha, int beta);      // Recurse to return the best value/option for the given board
+    std::vector<Space*> getMove(Board* copiedBoard, std::vector<Space*> orgMove);
+
 public:
-    AI_Agent(int maxP, int minP);                       // Constructor that asks for the value of min & max player
-    std::vector<Space*> getBestMove(Board* board);      // Get the best move given the current state of the board
+    AI_Agent(int maxP, int minP, int depth=3);          // Constructor that asks for the value of min & max player
+    int evalBoard(Board* board) const;                  // Evaluate the current state of the given board
+    std::vector<Space*> getBestMove(Board* board, std::vector<std::vector<Space*>> currMoves);      // Get the best move given the current state of the board
 };
 
 

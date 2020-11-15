@@ -33,6 +33,7 @@ public:
     int getSize() const;                                    // Getter for the size of the board
     std::vector<std::vector<Space*>> getMoves(int player);  // List of lists of valid moves for the given player
     Board* getDeepCopy();                                   // Return a copy of the current state of the board
+    int getTotPlayerSpaces(int player);                     // Returns total spaces that the player holds
 };
 
 

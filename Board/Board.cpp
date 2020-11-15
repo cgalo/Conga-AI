@@ -22,11 +22,17 @@ Board::~Board()
 void Board::setMove(std::vector<Space *> move, int player)
 {
     /**
+     * Method handles moving and distributing the rocks from the first/original space into the following spaces int the move list
+     * There are three different cases for setting a move
+     *  1. We are moving only one space, therefore we move the rocks in the original space and add them to the next space
+     *  2. We are moving 2 spaces, therefore we grab all the rocks from the first space we are moving, but we leave
+     *      just one in that space. Then we set all the rocks, plus the ones we grabbed from the previous space, into the last/2nd space
+     *  3. The move consists of 3 spaces. Similarly like in case 2, we grab all the rocks from the 1st space and leave just one.
+     *     Then we grab all the rocks from the 2nd space, but we leave just 2 now. Now in the last/3rd space we set all the
+     *     rocks we have acquired and add them to the rocks that space might have.
      *
-     * A move has at least 2 space objects, the 1st is the original space and the following are the destinations
-     *
-     * @param list of spaces, that include the original space, and the ones we want to move the rocks to
-     * @param the player making the move
+     * @param move - consists of a list of spaces that include the original space, and the ones we want to move the rocks to
+     * @param player - player value for the player making the move, used to set it as owner of the spaces where the rocks are getting moved to
      * */
 
     Space* originalSpace = move[0];             // We save the original space that we initiate the move
@@ -35,43 +41,50 @@ void Board::setMove(std::vector<Space *> move, int player)
     // Now there are three cases for the moves, depending on the range of the move (how many spaces are in the move)
     Space* space = move[1];                     // Get the next space in the move
     space->setPlayer(player);                   // Set the player as owner of this space
-    int currVal = space->getValue();            // Get the total rocks in the space
     if (totSpaces == 1)
     {
+        int currVal = space->getValue();        // Get the current value/rocks that the space holds
         space->setValue(currVal + totRocks);    // Set the rocks in the space
     }
 
-    else if (totSpaces == 2)                    // The move has up to 2 moves in total
+    else                                        // Else the move has more than one space
     {
-        space->setValue(1);                     // Give one of our rocks from totRocks
-        totRocks--;                             // Update totRocks as we just gave on away
-        space = move[2];                        // Get the last move in the list
-        currVal = space->getValue();            // Get the value for the current space
-        space->setPlayer(player);               // Set the player as owner of this space
-        space->setValue(currVal + totRocks);    // Add the remaining rocks in the last space
-    }
+        // For moves that hold 2-3 spaces we set only one rock inside the first space of the move
+        if (space->getValue() > 0)              // The space has rocks already in it
+        {
+            totRocks += space->getValue();       // Add the rocks back to the total rocks to distribute
+            space->setValue(0);                 // Set the space with 0 spaces
+        }
+        space->setValue(1);                 // Set 1 rock in the first space of the move
+        totRocks--;                         // Update the totRocks for the rock we just set in the space
+        // We get here after wrapping the first space for both cases of moves that hold 2-3 spaces
+        space = move[2];                    // Get the next space in the move
+        space->setPlayer(player);           // Set the player as owner of this space
+        if (totSpaces == 2)                     // If the move has total consists of 2 spaces, we start from the 2nd space of the move
+        {
+            int currVal = space->getValue();    // Get the rocks that are in this space
+            space->setValue(currVal + totRocks);    // Add the rocks the space back into it plus all the other rocks we have
+        }
+        else                                    // Else the move consists of 3 spaces, we start from the 2nd space of the move
+        {
+            if (space->getValue() > 0)              // The space has rocks already in it
+            {
+                totRocks += space->getValue();      // Add the rocks back to the total rocks to distribute
+                space->setValue(0);                 // Set the space with 0 spaces
+            }
+            space->setValue(2);               // Set two rocks in this space
+            totRocks = totRocks - 2;                // Subtract the two rocks we just placed from totRocks
 
+            space = move[3];                        // Move to the last space in the move
+            space->setPlayer(player);               // Set the player as owner of this space
+            int currVal = space->getValue();        // Get the rocks in this space
+            space->setValue(currVal + totRocks);    // Add the rocks already in the space plus the ones we have in the final space
+        }
 
-    else                                        // Else the move is has 3 spaces
-    {
-        space->setValue(1);               // Give one of our rocks from totRocks
-        totRocks--;                             // Update totRocks as we just gave on away
-        space = move[2];                        // Get the last move in the list
-        space->setPlayer(player);               // Set the player as owner of this space
-        totRocks -= 2;                          // Remove 2 rocks from our rocks
-        currVal = currVal + 2;                  // As we are giving this 2 rocks to the 2nd space
-        space->setValue(currVal);               // Add 2 rocks to the original value of the space
-        // Now we move to the next space
-        space = move[3];                        // Get the last space in the move list
-        space->setPlayer(player);               // Make the player of the owner of this move
-        currVal = space->getValue() + totRocks; // Add the remaining rocks to the last space
-        space->setValue(currVal);               // Set the rocks in the space
     }
-    totRocks = 0;                           // We set it back to 0 as we gave away all the rocks for the move
     // Now we release the original space from the player and leave it as an open space
     originalSpace->setPlayer(-1);                 // Set the player to empty
     originalSpace->setValue(0);                 // Set the value back to 0
-
 }
 
 Space * Board::getValue(int row, int col)
@@ -153,7 +166,7 @@ std::vector<std::vector<Space *>> Board::getMoves(int player)
     const int playerVal = player;                           // Save the value of the current player as playerVal
 
     // Now we loop through all the current spaces the player is in, we are going to see if there is a possible path per each space
-    for (auto space: spaces)                                // Iterate through each space in the list of spaces
+    for (auto& space: spaces)                               // Iterate through each space in the list of spaces
     {
         const int row = space->getRow(), col = space->getColumn();// Get the row and column locations of the current space
         int tempRow, tempCol;                               // This will be updated as needed depending on what path we are testing
@@ -198,7 +211,7 @@ std::vector<std::vector<Space *>> Board::getMoves(int player)
                     belowPath.push_back(belowSpace);        // Then insert the space in that location to the path
                 else                                        // Else the locations is invalid or it's not owned by the player
                     break;                                  // We break as we reached the end of this path
-                if (belowPath.size() == maxPathLen)            // If the path is the same size as the maxPathLen
+                if (belowPath.size() == maxPathLen)         // If the path is the same size as the maxPathLen
                     break;                                  // Then we maximized the rocks for this path
             }
             paths.push_back(belowPath);                     // Add the path to the list of paths
@@ -230,7 +243,7 @@ std::vector<std::vector<Space *>> Board::getMoves(int player)
         if (isValidLocation(tempRow, tempCol) &&            // If the indexes are within the matrix
             (rightSpace->getValue() == 0 || rightSpace->getPlayer() == playerVal))   // If the space is open or its owned by the player
         {
-             std::vector <Space*> rightPath;                // Create path to add our spaces to our right
+            std::vector <Space*> rightPath;                // Create path to add our spaces to our right
              for (tempCol = col; tempCol < getSize(); tempCol++)    // Iterate to the right until we reach the last/right-most column
              {
                  rightSpace = getValue(tempRow, tempCol);   // Save the current space for the current indexes
@@ -323,7 +336,7 @@ std::vector<std::vector<Space *>> Board::getMoves(int player)
         if (isValidLocation(tempRow, tempCol) &&                // If the indexes are within the board
            (downLeftSp->getValue() == 0 || downLeftSp->getPlayer() == playerVal))   // If the space is open or is owned by the player
         {
-            std::vector<Space*> downLeftPath;                   // We create a new list for this new path]
+            std::vector<Space*> downLeftPath;                   // We create a new list for this new path
             tempRow = row, tempCol = col;                       // Reset el row y el column
             while (isValidLocation(tempRow, tempCol))           // While the indexes are inside the board
             {
@@ -387,4 +400,17 @@ Board * Board::getDeepCopy()
         }
     }
     return copyBoard;                                       // Returned the copied board
+}
+
+int Board::getTotPlayerSpaces(int player)
+{
+    /**
+     * */
+
+    int totSpaces = 0;
+    for (int row = 0; row < getSize(); row++)
+        for (int col = 0; col < getSize(); col++)
+            if (getValue(row, col)->getPlayer() == player)
+                totSpaces++;
+    return totSpaces;
 }

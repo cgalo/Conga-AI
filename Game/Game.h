@@ -8,6 +8,7 @@
 #include <random>                       // To assist in selecting a random move
 
 #include "../Board/Board.h"             // Import the Board class
+#include "../AI_Agent/AI_Agent.h"       // Import the AI agent
 
 class Game {
 private:
