@@ -34,6 +34,7 @@ public:
     std::vector<std::vector<Space*>> getMoves(int player);  // List of lists of valid moves for the given player
     Board* getDeepCopy();                                   // Return a copy of the current state of the board
     int getTotPlayerSpaces(int player);                     // Returns total spaces that the player holds
+    std::vector<Space*> getPlayerSpaces(int player);         // Return a list of Spaces that the player holds in the given
 };
 
 

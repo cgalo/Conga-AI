@@ -414,3 +414,25 @@ int Board::getTotPlayerSpaces(int player)
                 totSpaces++;
     return totSpaces;
 }
+
+std::vector<Space *> Board::getPlayerSpaces(int player)
+{
+    /**
+     * Method returns a list of space pointers that the given player is holding in the current state of the board
+     *
+     * @param player - the player we want to know what spaces it holds
+     * @returns list of spaces that the player is the owner of
+     **/
+     
+    std::vector<Space*> spaces;
+    for (int row = 0; row < getSize(); row++)
+    {
+        for (int col = 0; col < getSize(); col++){
+            Space* space = getValue(row, col);      // Get the space for the index of row/col
+            if (space->getPlayer() == player)       // If the space is owned by the given player
+                spaces.push_back(space);            // Then we append it to the list of spaces
+        }
+    }
+    return spaces;
+
+}
