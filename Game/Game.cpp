@@ -33,7 +33,7 @@ void Game::start()
     /**
      * This method handles the turn by turn of the game, as well as who is the winner
      * */
-     AI_Agent* AI = new AI_Agent(white, black, 10);  // Create the AI player
+     AI_Agent* AI = new AI_Agent(white, black, 15);  // Create the AI player
      int currPlayer = white;                            // We set the white player as the initial player
      std::vector<std::vector<Space*>> currMoves;        // Vector will hold the moves of a player
      currMoves = masterBoard->getMoves(currPlayer);     // Get the moves for the current player
@@ -85,8 +85,9 @@ int Game::getRandNum(int max)
      * @return a random number between 0 and the max value - 1
      * */
 
-    std::default_random_engine generator;                               // To assist in generating a random number
-    std::uniform_int_distribution<int> distribution(0,max - 1);     // Range to pick a random number
-    int randomNum = distribution(generator);                        // Generate # between 0 and max - 1
-    return randomNum;
+//    std::default_random_engine generator;                               // To assist in generating a random number
+//    std::uniform_int_distribution<int> distribution(0,max - 1);     // Range to pick a random number
+//    int randomNum = distribution(generator);                        // Generate # between 0 and max - 1
+    srand(time(NULL));
+    return rand() % (max);
 }
