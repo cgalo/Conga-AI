@@ -444,3 +444,48 @@ std::vector<Space *> Board::getPlayerSpaces(int player)
     return spaces;
 
 }
+
+std::vector<Space *> Board::getNeighbors(Space *space)
+{
+    /**
+     * Method returns all the valid neighbors of the given space
+     *
+     * @param space - the space that we want the adjacent spaces
+     * @return list of spaces that are valid spaces adjacent to the given space
+     **/
+
+    std::vector <Space*> neighbors;                                     // List of space neighbors for the given space
+    const int orgRow = space->getRow(), orgCol = space->getColumn();    // Save the index locations for the space we want the neighbors
+    const int totOptions = 8;                                           // 8 possible neighbors per each direction
+
+    // Arrays for each row/col corresponding to the index of the direction
+    const int neighRow[] = {orgRow - 1, // North
+                          orgRow+ 1,    // South
+                          orgRow,       // West
+                          orgRow,       // East
+                          orgRow - 1,   // North-East
+                          orgRow - 1,   // North-West
+                          orgRow + 1,   // South-East
+                          orgRow + 1    // South-West
+                          };
+    const int neighCol[] = {orgCol,     // North
+                          orgCol,       // South
+                          orgCol - 1,   // West
+                          orgCol + 1,   // East
+                          orgCol + 1,   // North-East
+                          orgCol - 1,   // North-West
+                          orgCol + 1,   // South-East
+                          orgCol - 1    // South-West
+                          };
+
+    for (int i = 0; i < totOptions; i++)            // For every possible direction
+    {
+        int row = neighRow[i], col = neighCol[i];   // Get the row/col of the current index
+        if (isValidLocation(row, col))              // If the location is valid index for row & column
+        {
+            auto neighbor = getValue(row, col);     // Then we get the space from the board as it is a valid neighbor
+            neighbors.push_back(neighbor);          // Add the neighbor to the list of neighbors
+        }
+    }
+    return neighbors;                               // Return the list of neighbors of the given space
+}

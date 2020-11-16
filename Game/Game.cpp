@@ -33,7 +33,7 @@ void Game::start()
     /**
      * This method handles the turn by turn of the game, as well as who is the winner
      * */
-     AI_Agent* AI = new AI_Agent(white, black, 15);  // Create the AI player
+     AI_Agent* AI = new AI_Agent(white, black, 4 );  // Create the AI player
      int currPlayer = white;                            // We set the white player as the initial player
      std::vector<std::vector<Space*>> currMoves;        // Vector will hold the moves of a player
      currMoves = masterBoard->getMoves(currPlayer);     // Get the moves for the current player

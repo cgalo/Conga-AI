@@ -23,6 +23,8 @@ private:
     bool isValidLocation(int row, int column) const;        // Check if the given indexes are inside the board
     std::vector <Space*> getSpaces(int player);             // Get a list of spaces that the player holds
 
+
+
 public:
     Board();                                                // Constructor
     ~Board();                                               // Destructor
@@ -34,7 +36,8 @@ public:
     std::vector<std::vector<Space*>> getMoves(int player);  // List of lists of valid moves for the given player
     Board* getDeepCopy();                                   // Return a copy of the current state of the board
     int getTotPlayerSpaces(int player);                     // Returns total spaces that the player holds
-    std::vector<Space*> getPlayerSpaces(int player);         // Return a list of Spaces that the player holds in the given
+    std::vector<Space*> getPlayerSpaces(int player);        // Return a list of Spaces that the player holds in the given
+    std::vector<Space*> getNeighbors(Space* space);         // Return the adjacent spaces to the given space
 };
 
 

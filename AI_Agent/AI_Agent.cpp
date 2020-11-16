@@ -8,7 +8,7 @@ AI_Agent::AI_Agent(int maxP, int minP, int depth)
 {
     this->maxP = maxP;
     this->minP = minP;
-    this->maxP = depth;
+    this->maxDepth = depth;
 }
 
 std::vector<Space *> AI_Agent::getBestMove(Board *board, std::vector<std::vector<Space *>> currMoves)
@@ -51,32 +51,27 @@ int AI_Agent::evalBoard(Board *board) const {
     auto maxSpaces = board->getPlayerSpaces(maxP);  // Get the list of spaces the max player holds in the given board
     auto minSpaces = board->getPlayerSpaces(minP);  // Get the list of spaces that the min player holds in the board
 
-    if (minMoves.size() == 0)               // if the min player has no available moves
-        return 100;                        // Then is winning state and we give it a score of 100
+    if (minMoves.size() == 0)               // If the min player has no available moves
+        return 100;                         // Then is winning state and we give it a score of 100
     else if (maxMoves.size() == 0)          // If the max player has no available moves
-        return -100;                       // Return -100 as it is a loosing state
-    else
+        return -100;                        // Return -100 as it is a loosing state
+    else                                    // Else this not an end state
     {
-        int score = 0;
-        for (auto space: maxSpaces)
-        {
-            if (space->getValue() == 1)
-                score += 3;
-            else if (space->getValue() < 4)
-                score++;
-        }
+       int score = 0;
+       for (auto minSpace: minSpaces)
+       {
+           auto neighbors = board->getNeighbors(minSpace);  //Get the neighbors for the given space
+           for (auto neighbor: neighbors)                   // For every neighbor in the list of neighbors
+           {
+              if (neighbor->getPlayer() == maxP)            // If the maxPlayer already holds this neighbor
+                  score++;                                  // Then we add + 1 to the score
+              else                                          // Else the neighbor is either open or owned by the other
+                  score--;                                  // We subtract -1 to the score
+           }
+       }
+       int evalMoves = maxMoves.size() - minMoves.size();
+       return score + evalMoves;
 
-        for (auto space: minSpaces)
-        {
-            if (space->getValue() == 1)
-                score -= 3;
-            else if (space->getValue() < 4)
-                score--;
-        }
-
-        // New heuristic
-        score -= minMoves.size();
-        return score;
     }
 }
 
@@ -125,7 +120,7 @@ int AI_Agent::MiniMax(Board *board, int maxDepth, int depth, bool isMax, int alp
         {
             Board* tempBoard = board->getDeepCopy();
             auto tempMove = getMove(tempBoard, move);
-            tempBoard->setMove(tempMove, maxP);
+            tempBoard->setMove(tempMove, minP);
             int tempScore = MiniMax(tempBoard, maxDepth, depth+1, true, alpha, beta);
             minScore = (score < minScore) ? tempScore : minScore;   // If the score is less than minScore, make the score the new minScore
             beta = (minScore < beta) ? minScore : beta;             // If minScore is less than beta, make minScore the new beta
