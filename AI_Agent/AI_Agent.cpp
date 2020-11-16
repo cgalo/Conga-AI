@@ -48,20 +48,36 @@ int AI_Agent::evalBoard(Board *board) const {
 
     auto maxMoves = board->getMoves(maxP); // Get all the moves for the max player
     auto minMoves = board->getMoves(minP); // Get all the moves for the min player
-    int totMaxSpaces = board->getTotPlayerSpaces(maxP);
-    int totMinSpaces = board->getTotPlayerSpaces(minP);
-    int score;
+    auto maxSpaces = board->getPlayerSpaces(maxP);  // Get the list of spaces the max player holds in the given board
+    auto minSpaces = board->getPlayerSpaces(minP);  // Get the list of spaces that the min player holds in the board
 
     if (minMoves.size() == 0)               // if the min player has no available moves
-        score = 100;                        // Then is winning state and we give it a score of 100
+        return 100;                        // Then is winning state and we give it a score of 100
     else if (maxMoves.size() == 0)          // If the max player has no available moves
-        score = -100;                       // Return -100 as it is a loosing state
-//    else if (minMoves.size() == maxMoves.size())
-//        score = 0;
-//    else
-//        score = totMaxSpaces - totMinSpaces;
-        //score = (totMaxSpaces > totMinSpaces) ?  50 : -50;
-    return score;
+        return -100;                       // Return -100 as it is a loosing state
+    else
+    {
+        int score = 0;
+        for (auto space: maxSpaces)
+        {
+            if (space->getValue() == 1)
+                score += 3;
+            else if (space->getValue() < 4)
+                score++;
+        }
+
+        for (auto space: minSpaces)
+        {
+            if (space->getValue() == 1)
+                score -= 3;
+            else if (space->getValue() < 4)
+                score--;
+        }
+
+        // New heuristic
+        score -= minMoves.size();
+        return score;
+    }
 }
 
 int AI_Agent::MiniMax(Board *board, int maxDepth, int depth, bool isMax, int alpha, int beta)
