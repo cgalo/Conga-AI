@@ -8,12 +8,11 @@
 #define CONGA_AI_BOARD_H
 
 // Colors are used to differentiate if the space is owned by P1 or P2
-#define Color1 "[37m"                                      // Color for the P1 spaces
-#define Color2 "[35m"                                      // Color for the P2 spaces
+#define Color1 "[37m"                                    // Color for the P1 spaces
+#define Color2 "[35m"                                    // Color for the P2 spaces
 
 #include <iostream>                                         // For output
 #include <vector>                                           // To return list of possible moves for a player
-
 
 #include "../Space/Space.h"                                 // Space class to create a 2D matrix of them as a board
 class Board {
@@ -21,9 +20,6 @@ private:
     const int size = 4;                                     // Size of the matrix/board is a 4x4
     Space*** board;                                         // 2D matrix of Space pointers
     bool isValidLocation(int row, int column) const;        // Check if the given indexes are inside the board
-    std::vector <Space*> getSpaces(int player);             // Get a list of spaces that the player holds
-
-
 
 public:
     Board();                                                // Constructor
@@ -35,10 +31,8 @@ public:
     int getSize() const;                                    // Getter for the size of the board
     std::vector<std::vector<Space*>> getMoves(int player);  // List of lists of valid moves for the given player
     Board* getDeepCopy();                                   // Return a copy of the current state of the board
-    int getTotPlayerSpaces(int player);                     // Returns total spaces that the player holds
     std::vector<Space*> getPlayerSpaces(int player);        // Return a list of Spaces that the player holds in the given
     std::vector<Space*> getNeighbors(Space* space);         // Return the adjacent spaces to the given space
 };
-
 
 #endif //CONGA_AI_BOARD_H
