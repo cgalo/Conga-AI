@@ -33,6 +33,7 @@ void Game::start()
     /**
      * This method handles the turn by turn of the game, as well as who is the winner
      * */
+     AI_Agent* AI = new AI_Agent(white, black, 4 );  // Create the AI player
      int currPlayer = white;                            // We set the white player as the initial player
      std::vector<std::vector<Space*>> currMoves;        // Vector will hold the moves of a player
      currMoves = masterBoard->getMoves(currPlayer);     // Get the moves for the current player
@@ -47,7 +48,8 @@ void Game::start()
          if (currPlayer == white)                       // If it's the AI/white/player1 turn's
          {
              AIMoves++;                                 // Update the total moves of the AI
-             move = currMoves[getRandNum(currMoves.size())];
+             std::vector<Space*> tempMove = AI->getBestMove(masterBoard->getDeepCopy(), currMoves);
+             move = tempMove;
          }
          else                                           // Else it's the black player's turn
          {
@@ -61,13 +63,15 @@ void Game::start()
          currPlayer = (currPlayer == white) ? black : white;    // If the player is white then change to black, else vice versa
          currMoves = masterBoard->getMoves(currPlayer); // Get the moves for the new current player
      }
-
+     std::cout << std::endl;
+     masterBoard->printBoard();
      std::cout << "Congratulations player ";
      // Check who is the winner/looser
      if (currPlayer == white)                           // This means that white ran out of possible moves
         std::cout << "black!" << std::endl;
      else                                               // Else the black ran out of possible moves
          std::cout << "white!" << std::endl;
+     std::cout << "Total moves made: " << totPlays << std::endl;
 }
 
 int Game::getRandNum(int max)
@@ -81,8 +85,9 @@ int Game::getRandNum(int max)
      * @return a random number between 0 and the max value - 1
      * */
 
-    std::default_random_engine generator;                               // To assist in generating a random number
-    std::uniform_int_distribution<int> distribution(0,max - 1);     // Range to pick a random number
-    int randomNum = distribution(generator);                        // Generate # between 0 and max - 1
-    return randomNum;
+//    std::default_random_engine generator;                               // To assist in generating a random number
+//    std::uniform_int_distribution<int> distribution(0,max - 1);     // Range to pick a random number
+//    int randomNum = distribution(generator);                        // Generate # between 0 and max - 1
+    srand(time(NULL));
+    return rand() % (max);
 }
