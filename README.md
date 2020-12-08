@@ -13,11 +13,11 @@ maximizer player the AI agent, and the random agent as the minimizer player.
 ## Table of Content
 1. [Objective](#Objective)
 2. [Development](#Development)
-3. [What is Conga](#What is Conga)
+3. [What is Conga](#What-is-Conga)
 4. [Heuristic](#Heuristic)
-    - [Move Heuristic](#Move heuristic)
-    - [Neighbor Heuristic](#Neighbor heuristic)
-    - [Final Heuristic](#Final Heuristic)
+    - [Move Heuristic](#Move-heuristic)
+    - [Neighbor Heuristic](#Neighbor-heuristic)
+    - [Final Heuristic](#Final-Heuristic)
 5. [References](#References)
 
 ## Objective
