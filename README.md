@@ -146,7 +146,7 @@ for (auto minSpace: minSpaces){                     // Iterate through every spa
 }
 ```
 ### Final Heuristic
-The final heuristic consists on just adding both the [Move heuristic](#Move heuristic) and the [Neighbor heuristic](#Neighbor heuristic).
+The final heuristic consists on just adding both the [Move heuristic](#Move-heuristic) and the [Neighbor heuristic](#Neighbor-heuristic).
 Utilizing the variables from the pseudocode of the *Move* and *Neighbor* heuristics, as shown above we get:
 ```c++
 const int finalScore = moveScore + neighborScore;   // Add both the scores for a final heuristic
