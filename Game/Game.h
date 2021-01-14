@@ -1,6 +1,9 @@
-//
-// Created by Carlos Galo on 10/23/20.
-//
+/**
+ * Game class header file
+ * Game class handles the turn-to-turn operation of each player, and verifies who is the winner/looser.
+ * This class utilizes the Board class to create a Board to play in and the AI_Agent class to get the
+ * best possible move.
+ * */
 
 #ifndef CONGA_AI_GAME_H
 #define CONGA_AI_GAME_H
@@ -18,7 +21,7 @@ private:
 
 public:
     Game();                             // Constructor
-    ~Game();                            // Destructor for garbage collecion
+    ~Game();                            // Destructor for garbage collection
     void start();                       // Main method that will run the game until it's done
 };
 

@@ -1,11 +1,19 @@
-//
-// Created by Carlos Galo on 11/12/20.
-//
+/**
+ * AI_Agent source code
+ * Contains defined functions/methods for the AI_Agent class
+ * */
 
 #include "AI_Agent.h"
 
 AI_Agent::AI_Agent(int maxP, int minP, int depth)
 {
+    /**
+     * Constructor for the AI_Agent class
+     * @param maxP - Value of the maximizer player, should be the same value as given in the Game
+     * @param minP - Value of the minimizer player, should be the same value as given in the Game
+     * @param depth - The depth that we want to utilize for the MiniMax algorithm
+     * */
+
     this->maxP = maxP;
     this->minP = minP;
     this->maxDepth = depth;
@@ -14,12 +22,21 @@ AI_Agent::AI_Agent(int maxP, int minP, int depth)
 std::vector<Space *> AI_Agent::getBestMove(Board *board, std::vector<std::vector<Space *>> currMoves)
 {
     /**
+     * Function returns the 'best' move for the given state of the board.
+     * This is done by either using the given currMoves, or by getting the maximizer player's available moves
+     * in the board. We start evaluating every move from the list of moves, where we only keep the move with
+     * the highest score.
+     * After iterating through every move in the list of moves, we return the 'best' move, aka the move that had the
+     * highest score.
      *
+     * @param board - Board (pointer) object that holds the current state of the board
+     * @param currMoves - list of legal/available moves for the player we want the 'best' move for
+     * @return The best possible move as a vector of spaces
      * */
      
     std::vector<std::vector <Space*>> moves = currMoves;
     if (currMoves.empty())
-        moves = board->getMoves(maxP); // Get the available moves for the AI player
+        moves = board->getMoves(maxP);                  // Get the available moves for the AI player
 
     std::vector<Space*> bestMove;                       // This will be the best move
     int bestScore = INT_MIN;                            // To keep track of the best score
@@ -43,34 +60,55 @@ std::vector<Space *> AI_Agent::getBestMove(Board *board, std::vector<std::vector
 
 int AI_Agent::evalBoard(Board *board) const {
     /**
+     * Function evaluates the given state of the board and tries to give it a 'score'. A positive score means that the
+     * maximizer player, the AI, is doing better than the minimizer player. Negative scores reflect a better 'board'
+     * for the minimizer player. Max scores are -100 or 100, -100 means that the minimizer player won in this board
+     * while 100 means that the maximizer player won.
      *
+     * @param board - Board (pointer) object for a Conga game
+     * @return a number, or score, for the given state of the board
      * */
 
-    auto maxMoves = board->getMoves(maxP); // Get all the moves for the max player
-    auto minMoves = board->getMoves(minP); // Get all the moves for the min player
+    auto maxMoves = board->getMoves(maxP);          // Get all the moves for the max player
+    auto minMoves = board->getMoves(minP);          // Get all the moves for the min player
     auto maxSpaces = board->getPlayerSpaces(maxP);  // Get the list of spaces the max player holds in the given board
     auto minSpaces = board->getPlayerSpaces(minP);  // Get the list of spaces that the min player holds in the board
 
-    if (minMoves.size() == 0)               // If the min player has no available moves
-        return 100;                         // Then is winning state and we give it a score of 100
-    else if (maxMoves.size() == 0)          // If the max player has no available moves
-        return -100;                        // Return -100 as it is a loosing state
-    else                                    // Else this not an end state
+    if (minMoves.size() == 0)                       // If the min player has no available moves
+        return 100;                                 // Then is winning state and we give it a score of 100
+    else if (maxMoves.size() == 0)                  // If the max player has no available moves
+        return -100;                                // Return -100 as it is a loosing state
+    else                                            // Else this not an end state
     {
-       int score = 0;
-       for (auto minSpace: minSpaces)
+        /**
+         * Here we apply my own algorithm called 'Neighbor-Move Heuristic'.
+         * A neighbor(s) of a space would be any adjacent space(s) of a given space.
+         *
+         * This algorithm consists on giving a score by iterating through every space that the minimizer player
+         * holds, where we get every neighbor(s) of every space that the minimizer players holds. Then we iterate
+         * through each neighbor space and check if the maximizer player already holds this space, if they do then we
+         * add add +1 to the score, if they don't, or no one holds it, we subtract -1.
+         *
+         * After getting the Neighbor score, we now get the Moves scores. This score consists on evaluating the total
+         * possible moves of the maximizer player minus(-) the total possible moves of the minimizer player.
+         *
+         * We finish the Neighbor-Move heuristic by returning the Neighbor score + Move score
+         * */
+
+       int nScore = 0;                                      // Keep track of the 'Neighbor' score
+       for (auto minSpace: minSpaces)                       // Iterate through every space of the minimizer spaces
        {
            auto neighbors = board->getNeighbors(minSpace);  //Get the neighbors for the given space
            for (auto neighbor: neighbors)                   // For every neighbor in the list of neighbors
            {
               if (neighbor->getPlayer() == maxP)            // If the maxPlayer already holds this neighbor
-                  score++;                                  // Then we add + 1 to the score
+                  nScore++;                                 // Then we add + 1 to the score
               else                                          // Else the neighbor is either open or owned by the other
-                  score--;                                  // We subtract -1 to the score
+                  nScore--;                                 // We subtract -1 to the score
            }
        }
-       int evalMoves = maxMoves.size() - minMoves.size();
-       return score + evalMoves;
+       int movesScore = maxMoves.size() - minMoves.size();  // Get the 'Moves' score
+       return nScore + movesScore;                          // Return the addition of the Neighbor + Moves score
 
     }
 }
@@ -135,7 +173,13 @@ int AI_Agent::MiniMax(Board *board, int maxDepth, int depth, bool isMax, int alp
 std::vector<Space *> AI_Agent::getMove(Board *copiedBoard, std::vector<Space *> orgMove)
 {
     /**
+     * Function returns the the list of spaces equivalent in the copiedBoard.
+     * This function was created due to a bug with deep copies of board objects, this was we can get the space pointers
+     * of the space list we want from the new deep-copied board.
      *
+     * @param copiedBoard - A deep-copy pointer object of a Board
+     * @param orgMove - list of spaces, or move, that we want to get the equivalent in copiedBoard/new board
+     * @return Vector of spaces that contain the equivalent spaces of the given orgMove
      * */
 
     std::vector<Space*> move;

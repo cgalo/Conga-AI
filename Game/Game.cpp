@@ -1,6 +1,7 @@
-//
-// Created by Carlos Galo on 10/23/20.
-//
+/**
+ * Game class source code
+ * File contains the definition and explanation of each function of the Game class
+ * */
 
 #include "Game.h"
 
@@ -31,8 +32,9 @@ Game::~Game()
 void Game::start()
 {
     /**
-     * This method handles the turn by turn of the game, as well as who is the winner
+     * This method handles the turn by turn of the game, and outputs the winner
      * */
+
      AI_Agent* AI = new AI_Agent(white, black, 4 );  // Create the AI player
      int currPlayer = white;                            // We set the white player as the initial player
      std::vector<std::vector<Space*>> currMoves;        // Vector will hold the moves of a player
