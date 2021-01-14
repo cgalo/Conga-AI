@@ -1,6 +1,9 @@
-//
-// Created by Carlos Galo on 11/12/20.
-//
+/**
+ * AI_Agent header class.
+ * AI_Agent has only two public functions, one to evaluate/give a score to a Board object, and one to return the best
+ * for a player in a given board.
+ * This class takes advantage of the MiniMax algorithm w/ Alpha-Beta pruning, and my own 'Neighbor
+ * */
 
 #ifndef CONGA_AI_AI_AGENT_H
 #define CONGA_AI_AI_AGENT_H
